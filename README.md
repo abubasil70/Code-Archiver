@@ -13,6 +13,7 @@ This tool is inspired by Git but stripped down to the bare essentials. It create
 - **Note Management:** Add custom notes to each backup to describe what you changed.
 - **Clean UI:** Date-based version history with unique IDs for easy navigation.
 - **Restore Functionality:** Accidentally broke something? Restore any previous version to the source file instantly.
+- Watching directory and many other functions where added to the new branch.
 
 ## How to use
 1. **Launch:** Run the script.
@@ -20,7 +21,7 @@ This tool is inspired by Git but stripped down to the bare essentials. It create
 3. **Initialize:** Choose the file extensions you want to track (e.g., .py, .sql, .js).
 4. **Sync:** Whenever you reach a milestone, click **Sync All Changes**.
 5. **Review:** Click on any version in the history table to see the code or update its notes.
-6. Watching directory and many other functions where added to the new branch.
+
 
 ---
 **Maintained by:** Abu Basil  
