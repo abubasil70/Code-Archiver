@@ -1,3 +1,4 @@
+# This project is licensed under the MIT License - feel free to use it however you want
 import sys
 import os
 import sqlite3
