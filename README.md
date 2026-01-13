@@ -20,11 +20,7 @@ This tool is inspired by Git but stripped down to the bare essentials. It create
 3. **Initialize:** Choose the file extensions you want to track (e.g., .py, .sql, .js).
 4. **Sync:** Whenever you reach a milestone, click **Sync All Changes**.
 5. **Review:** Click on any version in the history table to see the code or update its notes.
-
-## Future Plans
-- [ ] Side-by-side diff viewer.
-- [ ] Encryption for sensitive files.
-- [ ] Tagging system for specific releases.
+6. Watching directory and many other functions where added to the new branch.
 
 ---
 **Maintained by:** Abu Basil  
