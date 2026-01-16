@@ -1,0 +1,110 @@
+MIT License: Permission is hereby granted to anyone to use, modify, and distribute this software without restriction.
+
+# CodeWatch (codew) - C++ Edition
+
+**CodeWatch** is a lightweight, high-performance CLI version control tool designed for developers who want a local, automated, and selective archiving system for their source code. Built with **C++** and **SQLite3**, it offers a faster and more portable alternative to the previous Python version.
+
+## Key Features
+
+* **Smart Polling:** Monitors file changes every 120 seconds.
+* **Content-Aware:** Automatically ignores empty files to prevent archiving temporary or blank files during renaming.
+* **Selective Archiving:** You choose exactly which files to track during the `init` phase.
+* **Interactive Management:** Easily browse, restore, delete, or export specific versions via an intuitive numbered menu.
+* **Portable:** Compiles into a single `.exe` (using w64devkit) that can be used globally from any directory.
+
+---
+
+## How it Works (The Workflow)
+
+### 1. Initialization
+
+Navigate to your project folder and run:
+
+```bash
+codew init
+
+```
+
+The tool will scan for supported text files (`.php`, `.py`, `.cpp`, etc.), display a numbered list, and ask you which ones to archive.
+
+### 2. Live Monitoring
+
+To start the background monitoring process:
+
+```bash
+codew now
+
+```
+
+If a database exists, it starts the 120-second timer. If not, it safely redirects you to the `init` process. It also alerts you if new files are created in the directory while monitoring.
+
+### 3. Archive Management
+
+To view your saved versions and perform actions:
+
+```bash
+codew list
+
+```
+
+This opens an interactive loop:
+
+1. **Select File:** Choose a file by its ID.
+2. **View History:** See all saved versions (ordered 1, 2, 3 from oldest to newest).
+3. **Commands:**
+* `restore <V_Num>`: Overwrites the current file with the selected version.
+* `export <V_Num>`: Saves the selected version to a new file.
+* `delete <V_Num>`: Removes a specific version from the database.
+* `addnote <V_Num>`: Attaches a custom description to a snapshot.
+
+
+
+---
+
+## Installation & Compilation
+
+To compile this tool using **w64devkit**:
+
+1. Ensure `sqlite3.c` and `sqlite3.h` are in the source folder.
+2. Run the following commands:
+
+```bash
+gcc -c sqlite3.c -o sqlite3.o
+g++ codew.cpp sqlite3.o -o codew.exe
+
+```
+
+3. Add the location of `codew.exe` to your Windows **PATH** environment variable to use the `codew` command anywhere.
+=============================================
+
+### Database Schema (SQLite)
+
+The tool uses a relational database structure to maintain the link between physical files and their historical snapshots.
+
+#### 1. `files` Table
+
+This table tracks the files you have chosen to archive.
+| Column | Type | Description |
+| :--- | :--- | :--- |
+| `id` | INTEGER | Primary Key (Unique File ID). |
+| `rel_path` | TEXT | The relative path of the file from the project root (Unique). |
+
+#### 2. `versions` Table
+
+This table stores every snapshot/version of the tracked files.
+| Column | Type | Description |
+| :--- | :--- | :--- |
+| `id` | INTEGER | Primary Key (Unique Version ID). |
+| `file_id` | INTEGER | Foreign Key referencing `files.id`. |
+| `content` | TEXT | The actual source code/text content of the file. |
+| `note` | TEXT | A custom note or "Auto-save" tag for the version. |
+| `stamp` | TIMESTAMP| Automatic timestamp of when the version was saved. |
+
+---
+
+### Key Technical Insights:
+
+* **Integrity:** If a file is moved or renamed, the tool will treat the new name as a new file, but the old versions remain safely stored under the original relative path in the database.
+* **Storage:** Using `TEXT` for content storage in SQLite is efficient for source code, as it handles encoding and large strings natively.
+* **Queries:** History is fetched using an `ASC` (Ascending) sort on `stamp` to ensure the logic of versioning (1, 2, 3...) remains chronologically correct.
+
